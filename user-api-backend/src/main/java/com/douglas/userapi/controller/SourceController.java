@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/source")
 public class SourceController {
 
-	@ApiOperation(value = "Find All Users", notes = "Find all users in database")
+	@ApiOperation(value = "Redirect to code", notes = "Redirects to the github link with the code")
 	@GetMapping
 	public void source(HttpServletResponse response) {
 		try {
