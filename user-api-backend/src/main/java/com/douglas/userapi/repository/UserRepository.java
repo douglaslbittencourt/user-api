@@ -6,4 +6,6 @@ import com.douglas.userapi.model.User;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
+	boolean existsByCpf(String cpf);
+
 }

@@ -1,12 +1,14 @@
 package com.douglas.userapi.service;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.douglas.userapi.exception.EntityAlreadyRegisteredException;
 import com.douglas.userapi.model.User;
 import com.douglas.userapi.repository.UserRepository;
 
@@ -19,7 +21,7 @@ public class UserService {
 	@Transactional
 	public User edit(User user) {
 		if (user.getId() == null) {
-			throw new RuntimeException("Id not informed");
+			throw new NoSuchElementException("Id not informed");
 		}
 		
 		User oldUser = findById(user.getId());
@@ -30,6 +32,9 @@ public class UserService {
 	
 	@Transactional
 	public User save(User user) {
+		if (repository.existsByCpf(user.getCpf())) {
+			throw new EntityAlreadyRegisteredException("CPF already registered");
+		}
 		user.setCreateDate(LocalDate.now());
 		return repository.save(user);
 	}
@@ -45,7 +50,7 @@ public class UserService {
 		Optional<User> optionalUser = repository.findById(id);
 		
 		if (!optionalUser.isPresent()) 
-			throw new RuntimeException(String.format("id : $o is invalid", id));
+			throw new NoSuchElementException(String.format("id : %o is invalid", id));
 		
 		return optionalUser.get();
 	}
