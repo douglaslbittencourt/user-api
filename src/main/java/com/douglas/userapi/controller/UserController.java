@@ -43,7 +43,7 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Delete User", notes = "Delete user by id paramter")
-	@DeleteMapping
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		try {
 			service.deleteById(id);
@@ -67,6 +67,12 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<?> findAll() {
 		return ResponseEntity.ok().body(service.findAll());
+	}
+	
+	@ApiOperation(value = "Find by id", notes = "Find user by Id")
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		return ResponseEntity.ok().body(service.findById(id));
 	}
 
 }
