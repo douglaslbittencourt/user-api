@@ -1,5 +1,7 @@
 package com.douglas.userapi.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +31,9 @@ public class Address {
 	@Column(nullable = false)
 	@ApiModelProperty(required = true)
 	private String cep;
+	@Column(nullable = false)
+	private LocalDate createDate;
+	private LocalDate updateDate;
 
 	public Long getId() {
 		return id;
@@ -84,6 +89,22 @@ public class Address {
 
 	public void setCep(String cep) {
 		this.cep = cep;
+	}
+
+	public LocalDate getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(LocalDate createDate) {
+		this.createDate = createDate;
+	}
+
+	public LocalDate getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(LocalDate updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }
