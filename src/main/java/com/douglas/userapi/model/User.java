@@ -15,7 +15,6 @@ import org.hibernate.validator.constraints.br.CPF;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-
 @Entity
 @Table(name = "user_entity")
 @ApiModel(description = "User Entity")
@@ -24,37 +23,39 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(nullable = false)
 	@ApiModelProperty(required = true)
 	private String name;
-	
+
 	private String gender;
-	
+
 	@Email(message = "E-mail format is invalid")
 	private String email;
-	
+
 	@Column(nullable = false)
 	private LocalDate birthDate;
-	
+
 	private String naturality;
-	
+
 	private String nationality;
-	
+
 	@Column(unique = true, nullable = false)
 	@CPF(message = "CPF format invalid")
 	@ApiModelProperty(required = true)
 	private String cpf;
-	
+
 	@Column(nullable = false)
 	private LocalDate createDate;
-	
+
 	private LocalDate updateDate;
-	
-	public User() {}
+
+	public User() {
+	}
 
 	public User(Long id, String name, String gender, @Email(message = "E-mail format is invalid") String email,
-			LocalDate birthDate, String naturality, String nationality, @CPF(message = "CPF format invalid") String cpf) {
+			LocalDate birthDate, String naturality, String nationality,
+			@CPF(message = "CPF format invalid") String cpf) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -65,8 +66,6 @@ public class User {
 		this.nationality = nationality;
 		this.cpf = cpf;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -135,7 +134,7 @@ public class User {
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
 	}
-	
+
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
@@ -147,7 +146,7 @@ public class User {
 	public void setUpdateDate(LocalDate updateDate) {
 		this.updateDate = updateDate;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
