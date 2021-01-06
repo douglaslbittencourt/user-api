@@ -19,6 +19,7 @@ import org.mockito.internal.util.collections.Iterables;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.douglas.userapi.model.Address;
 import com.douglas.userapi.model.User;
 import com.douglas.userapi.repository.UserRepository;
 
@@ -32,15 +33,22 @@ public class UserServiceTest {
 	@Mock
 	private UserRepository mockRepository;
 	
+	@Mock
+	private AddressService mockAddressService;
+	
 	@Test
 	public void editTest() {
+		Address address = createAddress(1L);
+		
 		User newUser = createUser(1L);
 		newUser.setName("Douglas Linhares");
 		newUser.setUpdateDate(LocalDate.now());
 		newUser.setCreateDate(LocalDate.now());
+		newUser.setAddress(address);
 		
 		User oldUser = createUser(1L);
 		oldUser.setCreateDate(LocalDate.now());
+		oldUser.setAddress(address);
 		
 		Optional<User> optionalOldUser = Optional.of(oldUser);	
 		
@@ -48,6 +56,7 @@ public class UserServiceTest {
 		when(mockRepository.save(oldUser)).thenReturn(newUser);
 		
 		assertEquals(newUser, service.edit(oldUser));
+		verify(mockAddressService, times(1)).edit(address);
 		
 	}
 	
@@ -63,12 +72,16 @@ public class UserServiceTest {
 	
 	@Test
 	public void saveTest() {
+		Address address = createAddress(1L);
+		
 		User user = createUser(null);
 		user.setCreateDate(LocalDate.now());
+		user.setAddress(address);
 		
 		User newUser = createUser(1L);
 		newUser.setCreateDate(LocalDate.now());
 		
+		when(mockAddressService.save(createAddress(null))).thenReturn(address);
 		when(mockRepository.save(user)).thenReturn(newUser);
 		
 		assertEquals(newUser, service.save(user));
@@ -77,11 +90,14 @@ public class UserServiceTest {
 	@Test
 	public void deleteByIdTest() {
 		User user = createUser(1L);
+		user.setAddress(createAddress(1L));
 		Optional<User> optionalUser = Optional.of(user);
 		
 		when(mockRepository.findById(1L)).thenReturn(optionalUser);
+		when(mockRepository.countByAddressId(1L)).thenReturn(1L);
 		
 		service.deleteById(1L);
+		verify(mockAddressService, times(1)).deleteById(1L);
 		verify(mockRepository, times(1)).deleteById(1L);
 	}
 	
@@ -137,8 +153,11 @@ public class UserServiceTest {
 		
 	}
 	
-	
 	private User createUser(Long id) {
 		return new User(id,"Douglas","M","douglaslbittencourt@gmail.com",LocalDate.of(1997, 12, 15),"Brasil", "Brasil", "42888068877");
+	}
+	
+	private Address createAddress(Long id) {
+		return new Address(id, "Rua Teste", "123", null, "São Paulo", "São Paulo", "12345-123");
 	}
 }

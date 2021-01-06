@@ -34,6 +34,19 @@ public class Address {
 	@Column(nullable = false)
 	private LocalDate createDate;
 	private LocalDate updateDate;
+	
+	public Address() {}
+
+	public Address(Long id, String street, String number, String complement, String city, String state, String cep) {
+		super();
+		this.id = id;
+		this.street = street;
+		this.number = number;
+		this.complement = complement;
+		this.city = city;
+		this.state = state;
+		this.cep = cep;
+	}
 
 	public Long getId() {
 		return id;

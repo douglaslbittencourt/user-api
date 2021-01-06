@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.douglas.userapi.exception.EntityAlreadyRegisteredException;
 import com.douglas.userapi.model.User;
+import com.douglas.userapi.repository.AddressRepository;
 import com.douglas.userapi.repository.UserRepository;
 
 @Service
@@ -18,10 +19,17 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
+	@Autowired
+	private AddressService addressService;
+	
 	@Transactional
 	public User edit(User user) {
 		if (user.getId() == null) {
 			throw new NoSuchElementException("Id not informed");
+		}
+		
+		if (user.getAddress() != null) {
+			addressService.edit(user.getAddress());
 		}
 		
 		User oldUser = findById(user.getId());
@@ -35,13 +43,21 @@ public class UserService {
 		if (repository.existsByCpf(user.getCpf())) {
 			throw new EntityAlreadyRegisteredException("CPF already registered");
 		}
+		
+		if (user.getAddress() != null) {
+			user.setAddress(addressService.save(user.getAddress()));
+		}
+		
 		user.setCreateDate(LocalDate.now());
 		return repository.save(user);
 	}
 	
 	@Transactional
 	public void deleteById(Long id) {
-		findById(id);
+		User user = findById(id);
+		if (user.getAddress() != null && repository.countByAddressId(user.getAddress().getId()) == 1) {
+			addressService.deleteById(user.getAddress().getId());
+		}
 		repository.deleteById(id);
 	}
 	

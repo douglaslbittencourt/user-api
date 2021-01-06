@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
@@ -49,6 +50,9 @@ public class User {
 	private LocalDate createDate;
 
 	private LocalDate updateDate;
+
+	@ManyToOne
+	private Address address;
 
 	public User() {
 	}
@@ -145,6 +149,14 @@ public class User {
 
 	public void setUpdateDate(LocalDate updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	@Override
